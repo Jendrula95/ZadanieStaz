@@ -1,5 +1,7 @@
 This README provides instructions for setting up and running the application, as well as conducting tests for JavaScript.
 
+The task has been solved in two variants. exampleFromConst reads data from a constant, while exampleFromFile reads from the JsonFile.json file.
+
 Before getting started, ensure you have the following installed on your machine:
 
 Node.js: Download and install Node.js
