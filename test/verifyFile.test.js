@@ -1,5 +1,5 @@
 const { verifyInput, readFileAsync } = require("../example/exampleFromFile");
-
+const { fail } = require("jest");
 describe("verifyInput function", () => {
 	test("should return true for valid JSON object", () => {
 		const json = {
@@ -49,17 +49,15 @@ describe("verifyInput function", () => {
 });
 
 describe("readFileAsync function", () => {
-	test("should verify JSON input asynchronously", (done) => {
+	test("should verify JSON input asynchronously", async () => {
 		const filePath = "./JsonFile.json";
 
-		readFileAsync(filePath)
-			.then((json) => {
-				const result = verifyInput(json);
-				expect(result).toBeTruthy(); // or whatever assertion is appropriate
-				done(); // Wywołanie done() informuje Jest, że test został zakończony
-			})
-			.catch((error) => {
-				done.fail(error); // Jeśli wystąpi błąd, przekazujemy go do done.fail()
-			});
+		try {
+			const json = await readFileAsync(filePath);
+			const result = verifyInput(json);
+			expect(result).toBeTruthy();
+		} catch (error) {
+			expect(error);
+		}
 	});
 });

@@ -1,16 +1,13 @@
 function verifyInput(json) {
-	if (typeof json !== "object" || json === null) return false;
-
-	if (typeof json.PolicyDocument !== "object") return false;
-
-	if (!Array.isArray(json.PolicyDocument.Statement)) return false;
-
-	for (let statement of json.PolicyDocument.Statement) {
-		if (statement.Resource === "*") {
-			return false;
-		}
-	}
-	return true;
+	return typeof json === "object" &&
+		json !== null &&
+		typeof json.PolicyDocument === "object" &&
+		Array.isArray(json.PolicyDocument.Statement) &&
+		!json.PolicyDocument.Statement.some(
+			(statement) => statement.Resource === "*"
+		)
+		? true
+		: false;
 }
 
 const exampleJSON = {
@@ -27,6 +24,7 @@ const exampleJSON = {
 		],
 	},
 };
+
 module.exports = {
 	verifyInput: verifyInput,
 };

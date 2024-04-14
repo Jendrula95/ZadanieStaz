@@ -1,41 +1,28 @@
 const fs = require("fs");
+const { verifyInput } = require("./exampleFromConst");
 
-function verifyInput(json) {
-	if (typeof json !== "object" || json === null) return false;
-
-	if (json.PolicyDocument && json.PolicyDocument.Statement) {
-		for (let statement of json.PolicyDocument.Statement) {
-			if (statement.Resource === "*") {
-				return false;
-			}
-		}
+async function readFileAsync(filePath) {
+	try {
+		const data = await fs.promises.readFile(filePath, "utf8");
+		const jsonData = JSON.parse(data);
+		return jsonData;
+	} catch (err) {
+		throw err;
 	}
-	return true;
 }
 
-function readFileAsync(filePath) {
-	return new Promise((resolve, reject) => {
-		fs.readFile(filePath, "utf8", (err, data) => {
-			if (err) {
-				reject(err);
-				return;
-			}
-			try {
-				const jsonData = JSON.parse(data);
-				resolve(jsonData);
-			} catch (err) {
-				reject(err);
-			}
-		});
-	});
+async function main() {
+	const filePath = "./JsonFile.json";
+	try {
+		const json = await readFileAsync(filePath);
+		const result = verifyInput(json);
+		console.log(result);
+	} catch (error) {
+		console.error(error);
+	}
 }
 
-const filePath = "./JsonFile.json";
-readFileAsync(filePath).then((json) => {
-	const result = verifyInput(json);
-
-	console.log(result);
-});
+main();
 
 module.exports = {
 	verifyInput: verifyInput,
